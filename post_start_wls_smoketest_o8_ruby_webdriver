@@ -1,0 +1,87 @@
+require "json"
+require "selenium-webdriver"
+require "rspec"
+require "rspec_junit_formatter_jenkins"
+include RSpec::Expectations
+
+describe "PostWlsSmoketestO8RubyWebdriver" do
+
+  before(:each) do
+    Selenium::WebDriver::Firefox.path = "/root/firefox/firefox"
+    @driver = Selenium::WebDriver.for :firefox
+    @base_url = "http://o8wlsnode1.infoplus-ot.ris:7001/console"
+    @accept_next_alert = true
+    @driver.manage.timeouts.implicit_wait = 30
+    @verification_errors = []
+  end
+  
+  after(:each) do
+    @driver.quit
+    @verification_errors.should == []
+  end
+  
+  it "test_post_wls_smoketest_o8_ruby_webdriver" do
+    @driver.get(@base_url + "/login/LoginForm.jsp")
+    @driver.find_element(:id, "j_username").clear
+    @driver.find_element(:id, "j_username").send_keys "weblogic"
+    @driver.find_element(:id, "j_password").clear
+    @driver.find_element(:id, "j_password").send_keys "webl0gic"
+    @driver.find_element(:css, "input.formButton").click
+    @driver.find_element(:id, "linkAppDeploymentsControlPage").click
+    line_num = 1
+    File.open("services.lst").each do|service|
+      # Look for deployments in the console page, cycling through the listed services
+      deploy_service = service.delete!("\n").upcase.to_s
+      state = "state" + line_num.to_s
+      health = "health" + line_num.to_s
+      name = "name" + line_num.to_s
+      puts "Checking if service #{deploy_service} has state Active and health OK"
+      expect(@driver.find_element(:id, "#{name}").text).to include("#{deploy_service}")
+      puts "Service #{deploy_service} is present"
+      expect(@driver.find_element(:id, "#{state}").text).to include("Active")
+      puts @driver.find_element(:id, "#{state}").text
+      puts "Service #{deploy_service} has state Active"
+      expect(@driver.find_element(:id, "#{health}").text).to include("OK")
+      puts "Service #{deploy_service} has health OK"
+      line_num = line_num+1
+    end
+    @driver.find_element(:link, "Log Out").click
+    @driver.find_element(:id, "j_password").clear
+    @driver.find_element(:id, "j_password").send_keys "webl0gic"
+    @driver.find_element(:id, "j_username").clear
+    @driver.find_element(:id, "j_username").send_keys "weblogic"
+  end
+  
+  def element_present?(how, what)
+    @driver.find_element(how, what)
+    true
+  rescue Selenium::WebDriver::Error::NoSuchElementError
+    false
+  end
+  
+  def alert_present?()
+    @driver.switch_to.alert
+    true
+  rescue Selenium::WebDriver::Error::NoAlertPresentError
+    false
+  end
+  
+  def verify(&blk)
+    yield
+  rescue ExpectationNotMetError => ex
+    @verification_errors << ex
+  end
+  
+  def close_alert_and_get_its_text(how, what)
+    alert = @driver.switch_to().alert()
+    alert_text = alert.text
+    if (@accept_next_alert) then
+      alert.accept()
+    else
+      alert.dismiss()
+    end
+    alert_text
+  ensure
+    @accept_next_alert = true
+  end
+end
