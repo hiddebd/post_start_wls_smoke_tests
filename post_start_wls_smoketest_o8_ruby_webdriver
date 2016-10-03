@@ -1,7 +1,7 @@
 require "json"
 require "selenium-webdriver"
 require "rspec"
-require "rspec_junit_formatter_jenkins"
+require "rspec_junit_formatter"
 include RSpec::Expectations
 
 describe "PostWlsSmoketestO8RubyWebdriver" do
@@ -13,6 +13,11 @@ describe "PostWlsSmoketestO8RubyWebdriver" do
     @accept_next_alert = true
     @driver.manage.timeouts.implicit_wait = 30
     @verification_errors = []
+    RSpec.configure do |config|
+      config.expect_with :rspec do |c|
+        c.syntax = [:should, :expect]
+      end
+    end
   end
   
   after(:each) do
