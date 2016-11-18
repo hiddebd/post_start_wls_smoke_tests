@@ -8,8 +8,9 @@ describe "PostWlsSmoketestO8RubyWebdriver" do
 
   before(:each) do
     Selenium::WebDriver::Firefox.path = "/root/firefox/firefox"
+    target_host = ENV["target_host"]
     @driver = Selenium::WebDriver.for :firefox
-    @base_url = "http://o8wlsnode1.infoplus-ot.ris:7001/console"
+    @base_url = "http://#{target_host}:7001/console"
     @accept_next_alert = true
     @driver.manage.timeouts.implicit_wait = 30
     @verification_errors = []
