@@ -9,8 +9,8 @@ describe "PostWlsSmoketestO8RubyWebdriver" do
   before(:each) do
     Selenium::WebDriver::Firefox.path = "/root/firefox/firefox"
     target_host = ENV["target_host"]
-    $target_user = ENV["target_user"]
-    $target_pass = ENV["target_pass"]
+    @target_user = ENV["target_user"]
+    @target_pass = ENV["target_pass"]
     @driver = Selenium::WebDriver.for :firefox
     @base_url = "http://#{target_host}:7001/console"
     @accept_next_alert = true
@@ -31,9 +31,9 @@ describe "PostWlsSmoketestO8RubyWebdriver" do
   it "test_post_wls_smoketest_o8_ruby_webdriver" do
     @driver.get(@base_url + "/login/LoginForm.jsp")
     @driver.find_element(:id, "j_username").clear
-    @driver.find_element(:id, "j_username").send_keys $target_user
+    @driver.find_element(:id, "j_username").send_keys @target_user
     @driver.find_element(:id, "j_password").clear
-    @driver.find_element(:id, "j_password").send_keys $target_host
+    @driver.find_element(:id, "j_password").send_keys @target_host
     @driver.find_element(:css, "input.formButton").click
     @driver.find_element(:id, "linkAppDeploymentsControlPage").click
     line_num = 1
