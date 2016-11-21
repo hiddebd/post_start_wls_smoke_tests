@@ -17,4 +17,4 @@ ADD xvfb.init /etc/init.d/xvfb
 ADD geckodriver /root/firefox/
 RUN chmod +x /etc/init.d/xvfb 
 RUN update-rc.d xvfb defaults
-CMD (service xvfb start;export PATH="$PATH:/root/firefox"; export DISPLAY=:10;cd /root/selenium_wd_tests/;target_host=${target_host} rspec post_start_wls_smoketest_o8_ruby_webdriver)
+CMD (service xvfb start;export PATH="$PATH:/root/firefox"; export DISPLAY=:10;cd /root/selenium_wd_tests/;target_host=${target_host} target_user=${target_user} target_pass=${target_pass} rspec post_start_wls_smoketest_o8_ruby_webdriver)
