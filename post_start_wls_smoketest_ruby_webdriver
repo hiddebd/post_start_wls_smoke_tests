@@ -31,12 +31,11 @@ describe "PostWlsSmoketestRubyWebdriver" do
   it "test_availability_of_wls_deployments" do
     @driver.get(@base_url + "/login/LoginForm.jsp")
     @driver.find_element(:id, "j_username").clear
-    @driver.find_element(:id, "j_username").send_keys "#$target_user"
+    @driver.find_element(:id, "j_username").send_keys $target_user
     @driver.find_element(:id, "j_password").clear
-    @driver.find_element(:id, "j_password").send_keys "#$target_host"
+    @driver.find_element(:id, "j_password").send_keys $target_pass
     @driver.find_element(:css, "input.formButton").click
-    # @driver.find_element(:id, "linkAppDeploymentsControlPage").click
-    @driver.find_element(:link, "Deployments").click
+    @driver.find_element(:id, "linkAppDeploymentsControlPage").click
     line_num = 1
     File.open("services.lst").each do|service|
       # Look for deployments in the console page, cycling through the listed services
