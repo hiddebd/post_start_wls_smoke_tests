@@ -8,11 +8,11 @@ describe "PostWlsSmoketestRubyWebdriver" do
 
   before(:each) do
     Selenium::WebDriver::Firefox.path = "/root/firefox/firefox"
-    target_host = ENV["target_host"]
+    $target_host = ENV["target_host"]
     $target_user = ENV["target_user"]
     $target_pass = ENV["target_pass"]
-    @driver = Selenium::WebDriver.for :firefox
-    @base_url = "http://#{target_host}:7001/console"
+    @driver = Selenium::WebDriver.for(:firefox, :profile => "firefox-default")
+    @base_url = "http://#{$target_host}:7001/console"
     @accept_next_alert = true
     @driver.manage.timeouts.implicit_wait = 30
     @verification_errors = []
