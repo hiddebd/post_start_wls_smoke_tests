@@ -1,7 +1,8 @@
 FROM ubuntu:latest
-RUN (apt-get update -qq >> /dev/null)
-RUN (apt-get install -q -y firefox xvfb python-pip ruby ruby-dev ruby-rspec wget >> /dev/null)
-RUN (apt-get remove -q -y firefox  >> /dev/null)
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install -y firefox xvfb python-pip ruby ruby-dev ruby-rspec wget
+RUN (apt-get remove -q -y firefox)
 RUN wget -q https://ftp.mozilla.org/pub/firefox/releases/45.3.0esr/linux-x86_64/en-US/firefox-45.3.0esr.tar.bz2 -O /root/firefox.tar.bz2
 RUN (cd /root/;tar -jxf firefox.tar.bz2)
 RUN pip install selenium
